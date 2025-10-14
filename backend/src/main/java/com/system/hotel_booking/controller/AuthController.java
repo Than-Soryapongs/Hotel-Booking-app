@@ -16,6 +16,8 @@ import com.system.hotel_booking.model.dto.ForgotPasswordRequest;
 import com.system.hotel_booking.model.dto.LoginRequest;
 import com.system.hotel_booking.model.dto.ResetPasswordRequest;
 import com.system.hotel_booking.model.dto.SignupRequest;
+import com.system.hotel_booking.ratelimit.RateLimited;
+import com.system.hotel_booking.ratelimit.RateLimitType;
 import com.system.hotel_booking.service.AuthService;
 import com.system.hotel_booking.util.CookieUtil;
 
@@ -30,6 +32,7 @@ public class AuthController {
     private final AuthService authService;
     
     @PostMapping("/signup")
+    @RateLimited(limit = 5, duration = 3600, type = RateLimitType.IP) // 5 signups per hour per IP
     @Operation(summary = "Register new user", description = "Creates a new user account and sends email verification")
     public ResponseEntity<Map<String, String>> signup(@Valid @RequestBody SignupRequest request) {
         Map<String, String> response = authService.signup(request);
@@ -44,6 +47,7 @@ public class AuthController {
     }
     
     @PostMapping("/resend-verification")
+    @RateLimited(limit = 3, duration = 600, type = RateLimitType.IP) // 3 resends per 10 minutes per IP
     @Operation(summary = "Resend verification email", description = "Resends verification email to user")
     public ResponseEntity<Map<String, String>> resendVerification(@RequestParam String email) {
         Map<String, String> response = authService.resendVerificationEmail(email);
@@ -51,6 +55,7 @@ public class AuthController {
     }
     
     @PostMapping("/login")
+    @RateLimited(limit = 10, duration = 300, type = RateLimitType.IP) // 10 login attempts per 5 minutes per IP
     @Operation(summary = "User login", description = "Authenticates user and sets JWT tokens in HttpOnly cookies")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request, 
                                               HttpServletRequest httpRequest,
@@ -122,6 +127,7 @@ public class AuthController {
     }
     
     @PostMapping("/forgot-password")
+    @RateLimited(limit = 3, duration = 600, type = RateLimitType.IP) // 3 requests per 10 minutes per IP
     @Operation(summary = "Forgot password", description = "Sends password reset email to user")
     public ResponseEntity<Map<String, String>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         Map<String, String> response = authService.forgotPassword(request.getEmail());
@@ -129,6 +135,7 @@ public class AuthController {
     }
     
     @PostMapping("/reset-password")
+    @RateLimited(limit = 5, duration = 600, type = RateLimitType.IP) // 5 attempts per 10 minutes per IP
     @Operation(summary = "Reset password", description = "Resets user password with valid token")
     public ResponseEntity<Map<String, String>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         Map<String, String> response = authService.resetPassword(request.getToken(), request.getNewPassword());

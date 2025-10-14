@@ -12,6 +12,8 @@ import com.system.hotel_booking.model.dto.ChangeEmailRequest;
 import com.system.hotel_booking.model.dto.ProfilePictureResponse;
 import com.system.hotel_booking.model.dto.UpdateProfileRequest;
 import com.system.hotel_booking.model.dto.UserResponse;
+import com.system.hotel_booking.ratelimit.RateLimited;
+import com.system.hotel_booking.ratelimit.RateLimitType;
 import com.system.hotel_booking.service.UserService;
 
 import java.util.Map;
@@ -40,6 +42,7 @@ public class UserController {
     }
     
     @PostMapping("/change-password")
+    @RateLimited(limit = 5, duration = 600, type = RateLimitType.USER) // 5 password changes per 10 minutes per user
     @Operation(summary = "Change password", description = "Changes user's password")
     public ResponseEntity<Map<String, String>> changePassword(
             @RequestParam String oldPassword,
@@ -49,6 +52,7 @@ public class UserController {
     }
     
     @PostMapping("/profile-picture")
+    @RateLimited(limit = 10, duration = 3600, type = RateLimitType.USER) // 10 uploads per hour per user
     @Operation(summary = "Upload profile picture", description = "Uploads or updates user's profile picture")
     public ResponseEntity<ProfilePictureResponse> uploadProfilePicture(
             @RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
@@ -72,6 +76,7 @@ public class UserController {
     }
     
     @PostMapping("/change-email")
+    @RateLimited(limit = 3, duration = 3600, type = RateLimitType.USER) // 3 email changes per hour per user
     @Operation(summary = "Request email change", description = "Initiates email change process with verification")
     public ResponseEntity<Map<String, String>> requestEmailChange(@Valid @RequestBody ChangeEmailRequest request) {
         Map<String, String> response = userService.requestEmailChange(request.getNewEmail(), request.getPassword());

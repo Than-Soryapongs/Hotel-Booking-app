@@ -151,6 +151,19 @@
             <artifactId>oauth2-oidc-sdk</artifactId>
             <version>11.9.1</version>
         </dependency>
+
+        <!-- Rate Limiting with Bucket4j -->
+        <dependency>
+            <groupId>com.bucket4j</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>8.10.1</version>
+        </dependency>
+        
+        <!-- Caffeine Cache for Bucket4j -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>
