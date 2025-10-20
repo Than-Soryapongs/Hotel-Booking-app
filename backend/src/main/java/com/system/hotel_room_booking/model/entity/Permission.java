@@ -13,32 +13,39 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "permissions", indexes = {
+    @Index(name = "idx_permission_name", columnList = "name"),
+    @Index(name = "idx_permission_resource", columnList = "resource")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Role {
+public class Permission {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Enumerated(EnumType.STRING)
-    @Column(unique = true, nullable = false, length = 20)
-    private RoleName name;
+    @Column(unique = true, nullable = false, length = 100)
+    private String name; // e.g., "BOOKING_CREATE", "ROOM_UPDATE", "USER_DELETE"
     
-    @Column(length = 100)
+    @Column(nullable = false, length = 50)
+    private String resource; // e.g., "BOOKING", "ROOM", "USER", "PAYMENT"
+    
+    @Column(nullable = false, length = 50)
+    private String action; // e.g., "CREATE", "READ", "UPDATE", "DELETE", "APPROVE"
+    
+    @Column(length = 255)
     private String description;
     
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-        name = "role_permissions",
-        joinColumns = @JoinColumn(name = "role_id"),
-        inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
+    @ManyToMany(mappedBy = "permissions")
     @Builder.Default
-    private Set<Permission> permissions = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
+    
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean isActive = true;
     
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -48,4 +55,3 @@ public class Role {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 }
-

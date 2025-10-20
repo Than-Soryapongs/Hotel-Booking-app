@@ -18,6 +18,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 .excludePathPatterns(
                     "/api/auth/verify-email",  // Only exclude verify-email (uses GET with token in URL)
+                    "/api/payments/**",
                     "/actuator/**",
                     "/swagger-ui/**",
                     "/v3/api-docs/**"

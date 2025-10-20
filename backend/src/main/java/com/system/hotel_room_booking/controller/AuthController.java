@@ -55,7 +55,7 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-    @RateLimited(limit = 10, duration = 300, type = RateLimitType.IP) // 10 login attempts per 5 minutes per IP
+    @RateLimited(limit = 10, duration = 10, type = RateLimitType.IP) // 10 login attempts per 5 minutes per IP
     @Operation(summary = "User login", description = "Authenticates user and sets JWT tokens in HttpOnly cookies")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request, 
                                               HttpServletRequest httpRequest,

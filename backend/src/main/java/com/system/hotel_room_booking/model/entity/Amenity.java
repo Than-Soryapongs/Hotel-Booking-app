@@ -13,32 +13,39 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "amenities", indexes = {
+    @Index(name = "idx_amenity_name", columnList = "name"),
+    @Index(name = "idx_amenity_category", columnList = "category")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Role {
+public class Amenity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Enumerated(EnumType.STRING)
-    @Column(unique = true, nullable = false, length = 20)
-    private RoleName name;
+    @Column(unique = true, nullable = false, length = 100)
+    private String name;
+    
+    @Column(length = 50)
+    private String category; // e.g., "Bathroom", "Entertainment", "Comfort", "Safety"
     
     @Column(length = 100)
+    private String icon; // Icon name or URL
+    
+    @Column(columnDefinition = "TEXT")
     private String description;
     
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-        name = "role_permissions",
-        joinColumns = @JoinColumn(name = "role_id"),
-        inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
+    @ManyToMany(mappedBy = "amenities")
     @Builder.Default
-    private Set<Permission> permissions = new HashSet<>();
+    private Set<Room> rooms = new HashSet<>();
+    
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean isActive = true;
     
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -48,4 +55,3 @@ public class Role {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 }
-

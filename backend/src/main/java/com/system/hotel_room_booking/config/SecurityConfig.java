@@ -83,6 +83,7 @@ public class SecurityConfig {
                                 "/webjars/**").permitAll()
                 .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                 .requestMatchers("/uploads/**").permitAll() // Allow public access to uploaded files
+                .requestMatchers("/api/payments/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )

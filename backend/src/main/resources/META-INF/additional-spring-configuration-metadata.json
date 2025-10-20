@@ -193,5 +193,65 @@
     "name": "sendgrid.from-name",
     "type": "java.lang.String",
     "description": "A description for 'sendgrid.from-name'"
+  },
+  {
+    "name": "payway.merchant-id",
+    "type": "java.lang.String",
+    "description": "ABA PayWay merchant ID"
+  },
+  {
+    "name": "payway.public-key",
+    "type": "java.lang.String",
+    "description": "ABA PayWay public API key"
+  },
+  {
+    "name": "payway.base-url",
+    "type": "java.lang.String",
+    "description": "Base URL for ABA PayWay"
+  },
+  {
+    "name": "payway.purchase-path",
+    "type": "java.lang.String",
+    "description": "Path for purchase endpoint"
+  },
+  {
+    "name": "payway.check-path",
+    "type": "java.lang.String",
+    "description": "Path for check-transaction endpoint"
+  },
+  {
+    "name": "payway.rsa-public-key",
+    "type": "java.lang.String",
+    "description": "ABA PayWay RSA public key for encryption"
+  },
+  {
+    "name": "payway.rsa-private-key",
+    "type": "java.lang.String",
+    "description": "ABA PayWay RSA private key for decryption"
+  },
+  {
+    "name": "payway.api-url",
+    "type": "java.lang.String",
+    "description": "ABA PayWay API endpoint URL"
+  },
+  {
+    "name": "payway.return-url",
+    "type": "java.lang.String",
+    "description": "Return URL after payment completion"
+  },
+  {
+    "name": "payway.continue-success-url",
+    "type": "java.lang.String",
+    "description": "Success page URL for customer redirect"
+  },
+  {
+    "name": "payway.cancel-url",
+    "type": "java.lang.String",
+    "description": "Cancel URL when user closes payment dialog or cancels"
+  },
+  {
+    "name": "payway.payment-timeout-min",
+    "type": "java.lang.String",
+    "description": "Payment timeout in minutes"
   }
 ]}
